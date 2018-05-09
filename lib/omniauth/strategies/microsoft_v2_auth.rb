@@ -5,7 +5,12 @@ module OmniAuth
     class MicrosoftV2Auth < OmniAuth::Strategies::OAuth2
       option :name, :microsoft_v2_auth
 
-      DEFAULT_SCOPE = "openid email profile https://graph.microsoft.com/User.Read"
+      DEFAULT_SCOPE = [
+        'email',
+        'openid',
+        'profile',
+        'User.Read'
+      ].join(' ')
 
       option :client_options, {
         site:          'https://login.microsoftonline.com',
