@@ -10,17 +10,17 @@ module OmniAuth
         'openid',
         'profile',
         'User.Read'
-      ].join(' ')
+      ]
 
       option :client_options, {
-        site:          'https://login.microsoftonline.com',
+        site: 'https://login.microsoftonline.com',
         authorize_url: '/common/oauth2/v2.0/authorize',
-        token_url:     '/common/oauth2/v2.0/token'
+        token_url: '/common/oauth2/v2.0/token'
       }
 
-     option :authorize_options, [:scope]
+      option :authorize_options, [:scope]
 
-      uid { raw_info["id"] }
+      uid { raw_info['id'] }
 
       extra do
         {
@@ -34,13 +34,13 @@ module OmniAuth
 
       def authorize_params
         super.tap do |params|
-          %w[display score auth_type].each do |v|
+          ['display', 'score', 'auth_type'].each do |v|
             if request.params[v]
               params[v.to_sym] = request.params[v]
             end
           end
 
-          params[:scope] ||= DEFAULT_SCOPE
+          params[:scope] = (DEFAULT_SCOPE + Array(params[:scope])).join(' ')
         end
       end
 
