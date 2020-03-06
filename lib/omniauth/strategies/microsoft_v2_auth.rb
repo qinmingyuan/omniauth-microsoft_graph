@@ -3,8 +3,6 @@ require 'omniauth/strategies/oauth2'
 module OmniAuth
   module Strategies
     class MicrosoftV2Auth < OmniAuth::Strategies::OAuth2
-      option :name, :microsoft_v2_auth
-
       DEFAULT_SCOPE = [
         'email',
         'openid',
@@ -12,16 +10,15 @@ module OmniAuth
         'User.Read'
       ]
 
+      option :name, :microsoft_v2_auth
       option :client_options, {
         site: 'https://login.microsoftonline.com',
         authorize_url: '/common/oauth2/v2.0/authorize',
         token_url: '/common/oauth2/v2.0/token'
       }
-
       option :authorize_options, [:scope]
 
       uid { raw_info['id'] }
-
       extra do
         {
           'raw_info' => raw_info
@@ -29,7 +26,7 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= access_token.get('https://graph.microsoft.com/v1.0/me').parsed
+        @raw_info ||= access_token.get('v3/users/me').parsed
       end
 
       def authorize_params
